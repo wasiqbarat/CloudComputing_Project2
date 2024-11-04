@@ -82,7 +82,7 @@ def get_definition(word):
         }), 500
 
 
-@app.route('/randomword')
+@app.route('/random_word')
 def random_word():
     try:
         api_url = 'https://api.api-ninjas.com/v1/randomword'
