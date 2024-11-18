@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hw2-api
+  labels:
+    app: hw2-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: hw2-api
+  template:
+    metadata:
+      labels:
+        app: hw2-api
+    spec:
+      containers:
+      - name: hw2-api
+        image: wasiqbarat/api  # Replace with your actual Docker image
+        ports:
+        - containerPort: 5000      # Port your app listens on
+        env:
+        - name: API_NINJA_KEY
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: API_NINJA_KEY
+        - name: REDIS_HOST
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: REDIS_HOST
+        - name: REDIS_PORT
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: REDIS_PORT
+        - name: REDIS_CACHE_DURATION
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: REDIS_CACHE_DURATION
+        - name: FLASK_PORT
+          valueFrom:
+            secretKeyRef:
+              name: api-secret
+              key: FLASK_PORT
