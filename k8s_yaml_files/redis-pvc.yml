@@ -9,5 +9,5 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 100Mi  # Updated to 100 MB
+      storage: 100Mi
   storageClassName: manual

@@ -29,7 +29,7 @@ spec:
         command: ["redis-server"]
         args: ["--save", "900", "1", "--save", "300", "10", "--save", "60", "10000", "--dir", "/data"]
         volumeMounts:
-        - mountPath: /data  # Directory where Redis persists data
+        - mountPath: /data
           name: redis-storage
       volumes:
       - name: redis-storage
