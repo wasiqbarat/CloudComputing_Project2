@@ -16,9 +16,10 @@ spec:
     spec:
       containers:
       - name: hw2-api
-        image: wasiqbarat/api  # Replace with your actual Docker image
+        image: wasiqbarat/api:latest  
+        imagePullPolicy: Always       
         ports:
-        - containerPort: 5000      # Port your app listens on
+        - containerPort: 5000
         env:
         - name: API_NINJA_KEY
           valueFrom:

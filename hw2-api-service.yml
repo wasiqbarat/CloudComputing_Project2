@@ -7,7 +7,6 @@ spec:
     app: hw2-api
   ports:
     - protocol: TCP
-      port: 5000        # Port inside the pod
-      targetPort: 5000  # Port your app listens on
-      nodePort: 30001   # Port on your machine
-  type: NodePort
+      port: 5000        
+      targetPort: 5000 
+  type: LoadBalancer

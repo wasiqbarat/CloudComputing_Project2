@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 import redis
 from datetime import datetime
 import json
+import socket
 
 load_dotenv()
 
@@ -51,6 +52,10 @@ def get_word_definition_from_api(word):
 @app.route('/dictionary/<word>')
 def get_definition(word):
     try:
+
+        # Get the pod's IP address
+        pod_ip = socket.gethostbyname(socket.gethostname())
+
         cached_data = redis_client.get(f'word:{word}')
         
         if cached_data:
@@ -58,7 +63,8 @@ def get_definition(word):
             return jsonify({
                 'data': cached_response['data'],
                 'source': 'redis_cache',
-                'cached_at': cached_response['timestamp']
+                'cached_at': cached_response['timestamp'],
+                'pod_ip': pod_ip  # Add pod IP in the response
             })
         
         api_response = get_word_definition_from_api(word)
@@ -67,7 +73,8 @@ def get_definition(word):
         
         return jsonify({
             'data': api_response,
-            'source': 'api_ninjas'
+            'source': 'api_ninjas',
+            'pod_ip': pod_ip  # Add pod IP in the response
         })
             
     except requests.RequestException as e:
@@ -85,6 +92,10 @@ def get_definition(word):
 @app.route('/random_word')
 def random_word():
     try:
+
+        # Get the pod's IP address
+        pod_ip = socket.gethostbyname(socket.gethostname())
+
         api_url = 'https://api.api-ninjas.com/v1/randomword'
         response = requests.get(api_url, headers={'X-Api-Key': f"{API_KEY}"})
 
@@ -94,7 +105,7 @@ def random_word():
             print("Error:", response.status_code, response.text)
 
         if response.status_code == 200:
-            return jsonify(response.json())
+            return jsonify(response.json() | {'pod_ip': pod_ip})
         else:
             return jsonify({
                 'error': 'Failed to fetch definition',
@@ -119,4 +130,3 @@ def server_error(error):
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", debug=True)
-
